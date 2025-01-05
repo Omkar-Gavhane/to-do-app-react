@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./App.css";
 import TaskList from "./components/TaskList";
@@ -7,6 +8,10 @@ import TaskForm from "./components/TaskForm";
 
 function App() {
   let [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    Analytics.page();
+  }, []);
 
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
