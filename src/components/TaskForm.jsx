@@ -6,6 +6,7 @@ const TaskForm = (props) => {
   const [userInput, setUserInput] = useState({
     title: "",
     id: "",
+    completed:false,
   });
 
   const addNewTask = (event) => {
@@ -13,12 +14,14 @@ const TaskForm = (props) => {
     const taskData = {
       title: userInput.title,
       id: userInput.id,
+      completed: false,
     };
     props.onTaskAdd(taskData);
     
     setUserInput({
       title: "",
       id: "",
+      completed: false,
     });
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./App.css";
 import TaskList from "./components/TaskList";
@@ -8,10 +8,29 @@ import TaskForm from "./components/TaskForm";
 function App() {
   let [tasks, setTasks] = useState([]);
 
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  // Save tasks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   const TaskAddHandler = (data) => {
     setTasks((prevTasks) => [...prevTasks, data]);
   };
-  console.log(tasks);
+
+  const taskCompletedHandler = (isChecked, id) => {
+      setTasks((prevTasks) =>
+        prevTasks.map((item) =>
+          item.id === id ? { ...item, completed: isChecked } : item
+        )
+      );
+  };
 
   const TaskDeleteHandler = (id) => {
     setTasks(
@@ -28,7 +47,11 @@ function App() {
       <div className="md:container mx-auto">
         <TaskForm onTaskAdd={TaskAddHandler} />
         <Card className="p-5 m-5">
-          <TaskList tasks={tasks} onTaskDelete={TaskDeleteHandler} />
+          <TaskList
+            tasks={tasks}
+            onCompletedTask={taskCompletedHandler}
+            onTaskDelete={TaskDeleteHandler}
+          />
         </Card>
       </div>
     </div>

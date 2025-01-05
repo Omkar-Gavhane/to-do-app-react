@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const ListCheckbox = (props) => {
-  const [isChecked, setIsChecked] = useState(false);
-  const checkboxHandler = () => {
-    setIsChecked(!isChecked);
-  };
+  const [isChecked, setIsChecked] = useState(props.isChecked || false); // Initialize from props
 
-  props.onCheckHandler(isChecked);
+  useEffect(() => {
+    setIsChecked(props.isChecked); // Sync with prop changes
+  }, [props.isChecked]);
+
+  const checkboxHandler = () => {
+    const updatedCheck = !isChecked;
+    setIsChecked(updatedCheck);
+    props.onCheckHandler(updatedCheck, props.id); // Notify parent
+  };
 
   return (
     <div>
